@@ -1,0 +1,32 @@
+.sidebar {
+  text-align: center;
+  padding: 2rem 0;
+  position: fixed;
+  width: $sidebarWidth;
+  top: 0;
+  bottom: 0;
+  background: linear-gradient(to bottom, $orange, $red);
+  z-index: $zindex-sidebar;
+
+  @media (max-width: 768px) {
+    overflow: scroll;
+    &.for-mobile {
+      display: none;
+      &.show {
+        display: block;
+        top: 56px;
+        right: 0;
+      }
+    }
+  }
+}
+
+.content {
+  margin-left: $sidebarWidth;
+  z-index: $zindex-content;
+
+  @media (max-width: 768px) {
+    margin-left: 0;
+  }
+  
+}

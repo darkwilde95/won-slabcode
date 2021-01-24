@@ -1,0 +1,146 @@
+.catalog-content {
+  padding-top: 100px;
+  padding-left: 40px;
+  padding-right: 40px;
+  left: $sidebarWidth;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(4, 1fr);
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+  @media (max-width: 768px) {
+    padding-top: 130px;
+    grid-template-columns: repeat(3, 1fr);
+    padding-right: 40px;
+    padding-left: 40px;
+  }
+  @media (max-width: 425px) {
+    grid-template-columns: repeat(2, 1fr);
+    padding-right: 10px;
+    padding-left: 10px;
+  }
+}
+
+.navbar { 
+  height: 75px;
+  display: flex;
+  align-items: center;
+  position: fixed;
+  top: 0;
+  right: 0;
+  left: $sidebarWidth;
+  z-index: $zindex-nav;
+  background-color: $background-color;
+  border-bottom: 1px solid #eee;
+  box-shadow: 0 2px 5px 0 rgba(0,0,0,.1);
+  padding-left: 8rem;
+  // overflow-x: scroll;  // CON ESTO SE QUITAN LOS CONTROLES DE LA NAVBAR EN MOVIL
+  // overflow-y: hidden;  // LOS VUELVE INNECESARIOS
+
+  .filters {
+    padding-left: 0;
+    display: flex;
+    .nav-item {
+      display: inline-block;
+      margin-right: 4rem;
+      text-transform: uppercase;
+      letter-spacing: 0.125rem;
+      color: $gray-color !important;
+      cursor: pointer;
+      text-align: center;
+      &.selected {
+        padding-bottom: 4px;
+        border-bottom: 2px solid $orange;
+      }
+    }
+  }
+  
+  .left-button {
+    display: none;
+  }
+
+  .right-button {
+    display: none;
+  }
+
+  .nav-right {
+    margin-left: auto;
+    margin-right: 4rem;
+    display: flex;
+    align-items: center;
+    @media (max-width: 425px) {
+      display: none;
+    }
+  }
+
+  @media (max-width: 1024px) {
+    padding-left: 3rem;
+  }
+
+  @media (max-width: 768px) {
+    height: 56px;
+    top: 56px;
+    left: 0;
+    padding-left: 2rem;
+  }
+}
+
+@media (max-width: 425px) {
+
+  .left-button {
+    position: absolute;
+    transform: rotate(180deg); 
+    left: 0; 
+    height: 57px;
+    width: 57px;
+    justify-content: center;
+    background: linear-gradient(to left, #F5F5F5, rgba(#F5F5F5,0.9));
+    &.show {
+      display: flex;
+    }
+  }
+
+  .right-button {
+    position: absolute;
+    right: 0;
+    height: 57px;
+    width: 57px;
+    justify-content: center;
+    background: linear-gradient(to right, #F5F5F5, rgba(#F5F5F5,0.9));
+    &.show {
+      display: flex;
+    }
+  }
+  
+  .end {
+    justify-content: flex-end !important;
+    padding-left: 2rem;
+  }
+
+  .begin {
+    justify-content: flex-start !important;
+    padding-right: 2rem;
+  }
+}
+
+.btn-wonpurse {
+  display: flex !important;
+  align-items: center;
+  background-color: $orange;
+  color: #FFFFFF;
+  border-radius: 18px !important;
+  letter-spacing: 0.065rem;
+  font-size: 11px;
+  margin-right: 6rem;
+  min-width: 115px;
+
+  img {
+    margin-right: 0.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    padding: 0.25rem 0.25rem;
+  }
+}
