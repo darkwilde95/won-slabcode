@@ -1,49 +1,68 @@
 // LIBS
 import { auth_get } from 'js/request'
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 // ASSETS
 import CatalogNavbar from 'views/components/CatalogNavbar'
 import ProductCard from 'views/components/ProductCard'
+import InfiniteScroller from 'views/utils/InfiniteScroller'
 
 const Catalog = ({ toogle }) => {
 
   const [selected, setSelected] = useState(0)
-  const [data, setData] = useState({ data: [], loaded: false })
+  const page = useRef(1)
+  // const lastCategory = useRef(0)
+  const [data, setData] = useState({ data: [], hasMore: true })
 
   useEffect(() => {
-    const categories = {
-      0: '/products/top',
-      1: 'products/search?page=1&per_page=20&category=11',
-      2: 'products/search?page=1&per_page=20&category=6',
-      3: 'products/search?page=1&per_page=20&category=2',
-      4: 'products/search?page=1&per_page=20&category=1'
-    }
-    setData({ data: [], loaded: false })
-    auth_get(categories[selected]).then(
-      res => {
-        setData({ loaded: true, data: [...res.data.data] })
-      }
-    ).catch(
-      err => {
-        setData({ loaded: true, data: [] })
-        console.log(err.response)
-      }
-    )
+    page.current = 1
+    setData({ data: [], hasMore: true })
   }, [selected])
+
+  const searchRequest = setLoading => {
+    if (selected === 0 && page.current >= 2) {
+      setData({ ...data, hasMore: false }) 
+    } else {
+      const categories = {
+        0: '/products/top',
+        1: `products/search?page=${page.current}&per_page=10&category=11`,
+        2: `products/search?page=${page.current}&per_page=10&category=6`,
+        3: `products/search?page=${page.current}&per_page=10&category=2`,
+        4: `products/search?page=${page.current}&per_page=10&category=1`
+      }
+      page.current++
+      setLoading(true)
+      auth_get(categories[selected]).then(
+        res => {
+          setLoading(false)
+          const update = { 
+            data: [...data.data, ...res.data.data],
+            hasMore: selected !== 0 ? res.data.meta.next_page !== null : false
+          }
+          setData(update)
+        }
+      ).catch(
+        err => {
+          setData({ data: [], hasMore: false })
+          console.log(err)
+          console.log(err.response)
+        }
+      )
+    }
+  }
 
   return (
     <>
       <CatalogNavbar selected={ selected } setSelected={ setSelected } />
-      <div className={ `catalog-content ${ toogle ? 'remove-overflow' : '' }`} >
-        { !data.loaded && <div className='loading'>Cargando...</div> }
-        { data.loaded && data.data.map((p, i) => (
+      <InfiniteScroller
+        hasMore={ data.hasMore }
+        containerClass={ `catalog-content ${ toogle ? 'remove-overflow' : '' }`}
+        update={ setLoading => searchRequest(setLoading) } >
+        { data.data.map((p, i) => (
           <ProductCard key={ i } product={ p } />
-        ))
-        }
-      </div>
+        )) }
+      </InfiniteScroller>
     </>
-    
   )
 }
 
